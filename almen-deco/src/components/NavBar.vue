@@ -13,7 +13,7 @@
             <router-link class="nav-link" to="/">Inicio</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/productos">Productos</router-link>
+            <router-link class="nav-link" :to= "{name:'ComprasVue'}">Productos</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/carro">Carro</router-link>
@@ -40,6 +40,9 @@ export default {
 .navbar {
   padding: 10px 20px;
   margin-top: 10px;
+  position: sticky;
+  top:0;
+  z-index: 3;
 }
 
 .navbar-nav .nav-item {

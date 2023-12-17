@@ -1,7 +1,7 @@
 <template>
     <div class="carrousel-header">
       <div class="logo-container">
-        <img class="logo" src="https://i.postimg.cc/pyNt3yWf/logo-con-fondo.png" alt="almen-deco logo">
+        <img class="logo" src="https://i.postimg.cc/VkdxWtFP/logo-con-fondo2.png" alt="almen-deco logo">
       </div>
       <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
@@ -64,7 +64,9 @@
 
 .logo-container {
   position: absolute;
-  top: 30%;
+  display: flex;
+  justify-content: center;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
@@ -72,21 +74,26 @@
 }
 
 .logo {
-  max-width: 100%;
+  max-width: 60%;
   height: auto;
+  filter: brightness(1);
   transition: max-width 0.3s ease; 
 }
 
 img {
-  max-height: 400px;
+  max-height: 85vh;
   min-height: 200px;
   object-fit: cover;
   transition: all 0.3s ease;
+  filter:brightness(0.7);
 }
 
 .carousel-caption {
-  backdrop-filter: blur(2px);
-  background-color: rgba(10, 10, 10, 0.219);
+  color: rgb(255, 255, 255);
+  font-size: 20px;
+  font-weight: 700;
+  backdrop-filter: blur(8px);
+  /* background-color: rgba(10, 10, 10, 0.219); */
 }
 
 @media (max-width: 767px) {
