@@ -1,52 +1,49 @@
 <template>
   <div class="categories-products d-flex flex-wrap justify-content-around">
-    <div class="card mb-3 ml-2 mr-2" v-for="(product, index) in products" :key="index" style="width: 18rem;">
-      <img :src="product.image" class="card-img-top" alt="Product Image" />
+    <div v-for="(category, index) in uniqueCategories" :key="index" class="card mb-3 ml-2 mr-2" style="width: 18rem;">
+      <img :src="getCategoryImage(category)" class="card-img-top" alt="Category Image" />
       <div class="card-body text-center">
-        <h5 class="card-title">{{ product.title }}</h5>
-        <p class="card-text">{{ product.description }}</p>
-        <a :href="product.link" class="btn btn-custom">Ver +</a>
+        <h5 class="card-title">{{ category }}</h5>
+        <router-link class="btn btn-custom" :to= "{name:'ComprasVue'}">Ver +</router-link>
       </div>
     </div>
   </div>
 </template>
 
-  <script>
-  export default {
-    name: 'CategoriesProducts',
-    data() {
-      return {
-        products: [
-          {
-            title: 'Product 1',
-            description: 'Reciclados.',
-            image: 'https://i.postimg.cc/XJJ3CT1C/pinos.jpg',
-            link: '#',
-          },
-          {
-            title: 'Product 2',
-            description: 'Tejidos.',
-            image: 'https://i.postimg.cc/XJJ3CT1C/pinos.jpg',
-            link: '#',
-          },
-          {
-            title: 'Product 3',
-            description: 'Madera.',
-            image: 'https://i.postimg.cc/XJJ3CT1C/pinos.jpg',
-            link: '#',
-          },
-          {
-            title: 'Product 4',
-            description: 'Fumada cosmica.',
-            image: 'https://i.postimg.cc/XJJ3CT1C/pinos.jpg',
-            link: '#',
-          },
-      
-        ],
-      };
+<script>
+export default {
+  name: 'CategoriesProducts',
+  data() {
+    return {
+      products: [],
+    };
+  },
+  computed: {
+    uniqueCategories() {
+      return [...new Set(this.products.map(product => product.categoria))];
     },
-  };
-  </script>
+  },
+  mounted() {
+    this.fetchProducts();
+  },
+  methods: {
+    async fetchProducts() {
+      try {
+        const response = await fetch('http://localhost:5000/producto');
+        const data = await response.json();
+        this.products = data;
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    },
+    getCategoryImage(category) {
+      const productWithCategory = this.products.find(product => product.categoria === category);
+      return productWithCategory ? productWithCategory.urlimg : 'url_de_la_imagen_por_defecto';
+    },
+   
+  },
+};
+</script>
   
   <style scoped>
 .categories-products {

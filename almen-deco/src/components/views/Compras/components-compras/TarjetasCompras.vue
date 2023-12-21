@@ -1,72 +1,71 @@
 <template>
-    <div class="tarjetas-compras d-flex flex-wrap justify-content-around">
-      <div class="card mb-3 ml-2 mr-2" v-for="(product, index) in products" :key="index" style="width: 18rem;">
-        <img :src="product.image" class="card-img-top" alt="Product Image" />
-        <div class="card-body text-center">
-          <h5 class="card-title">{{ product.title }}</h5>
-          <p class="card-text">{{ product.description }}</p>
-          <a :href="product.link" class="btn btn-custom">Ver +</a>
+  <div class="tarjetas-compras row row-cols-1 row-cols-md-2 g-4 justify-content-center align-items-center" >
+    <div v-for="producto in productos" :key="producto.id" class="card mx-auto" style="width: 18rem;">
+      <div :id="'carousel-' + producto.id" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div v-for="(imagen, imgIndex) in producto.urlimg" :key="`imagen-${producto.id}-${imgIndex}`" :class="{ 'carousel-item': true, 'active': imgIndex === 0 }">
+            <img :src="imagen" class="d-block w-100" :alt="`Imagen ${imgIndex + 1}`" />
+          </div>
         </div>
+        <button class="carousel-control-prev" type="button" :data-bs-target="'#carousel-' + producto.id" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" :data-bs-target="'#carousel-' + producto.id" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ producto.nombre }}</h5>
+        <p class="card-text">{{ producto.descripcion }}</p>
+        <p class="card-text"><strong>Precio:</strong> ${{ producto.precio }}</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
       </div>
     </div>
-  </template>
-  
-    <script>
-    export default {
-      name: 'TarjetasCompras',
-      data() {
-        return {
-          products: [
-            {
-              title: 'Product 1',
-              description: 'Reciclados.',
-              image: 'https://i.postimg.cc/XJJ3CT1C/pinos.jpg',
-              link: '#',
-            },
-            {
-              title: 'Product 2',
-              description: 'Tejidos.',
-              image: 'https://i.postimg.cc/XJJ3CT1C/pinos.jpg',
-              link: '#',
-            },
-            {
-              title: 'Product 3',
-              description: 'Madera.',
-              image: 'https://i.postimg.cc/XJJ3CT1C/pinos.jpg',
-              link: '#',
-            },
-            {
-              title: 'Product 4',
-              description: 'Fumada cosmica.',
-              image: 'https://i.postimg.cc/XJJ3CT1C/pinos.jpg',
-              link: '#',
-            },
-        
-          ],
-        };
-      },
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'TarjetasCompras',
+  data() {
+    return {
+      productos: [],
     };
-    </script>
-    
-    <style scoped>
-  .categories-products {
-    padding: 10px;
+  },
+  mounted() {
+    this.fetchProductos();
+  },
+  methods: {
+    async fetchProductos() {
+      try {
+        const response = await fetch('http://localhost:5000/producto');
+        const data = await response.json();
+        this.productos = data;
+      } catch (error) {
+        console.error('Error al obtener productos:', error);
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+.tarjetas-compras{
+  margin-top: 1rem;
+  padding: 1rem;
+  margin:1rem;
+  max-width: 100%;
+}
+.card {
+  margin: 1rem;
+}
+
+.carousel-inner img {
+  margin-top: 1rem;
+  border-radius:10px;
+  min-height: 300px;
+  object-fit: cover;
   }
-  .card {
-    background-color: #edf1ee;
-  }
-  img {
-    padding: 5px;
-    object-fit: cover;
-  }
-  .btn-custom {
-    background-color: #bc9c8e;
-    border-color: #bc9c8e;
-    color: #ffffff; /* Color del texto */
-  }
-  
-  .btn-custom:hover {
-    background-color: #7c5e44;
-    border-color: #7c5e44;
-  }
-  </style>
+</style>
