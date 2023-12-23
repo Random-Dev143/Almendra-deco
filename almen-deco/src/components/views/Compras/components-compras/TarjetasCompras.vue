@@ -20,7 +20,7 @@
         <h5 class="card-title">{{ producto.nombre }}</h5>
         <p class="card-text">{{ producto.descripcion }}</p>
         <p class="card-text"><strong>Precio:</strong> ${{ producto.precio }}</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+        <a href="#" class="btn btn-primary">+ Info</a>
       </div>
     </div>
   </div>

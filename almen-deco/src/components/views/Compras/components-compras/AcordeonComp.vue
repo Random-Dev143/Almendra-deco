@@ -1,53 +1,67 @@
 <template>
   <div class="acordeon-vue">
     <div class="accordion" id="accordionExample">
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-        Accordion Item #1
-      </button>
-    </h2>
-    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+            aria-expanded="true" aria-controls="collapseOne">
+            Filtros
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <!-- Crear checkboxes dinámicamente para cada categoría -->
+            <div v-for="categoria in categorias" :key="categoria.id">
+              <input type="checkbox" :id="categoria.id" :value="categoria.nombre" v-model="categoriasSeleccionadas">
+              <label :for="categoria.id">{{ categoria.nombre }}</label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-        Accordion Item #2
-      </button>
-    </h2>
-    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-        Accordion Item #3
-      </button>
-    </h2>
-    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-      </div>
-    </div>
-  </div>
-</div>
   </div>
 </template>
 
 <script>
 export default {
-    name:'AcordeonVue'
-
-}
+  name: 'AcordeonVue',
+  data() {
+    return {
+      productos: [], // Aquí almacenaremos los productos
+      categorias: [], // Aquí almacenaremos las categorías
+      categoriasSeleccionadas: [], // Aquí almacenaremos las categorías seleccionadas
+    };
+  },
+  async mounted() {
+    try {
+      await this.fetchProductos();
+      this.obtenerCategorias(); // Llamamos a la función para obtener categorías
+    } catch (error) {
+      console.error('Error al obtener productos:', error);
+    }
+  },
+  methods: {
+    async fetchProductos() {
+      try {
+        const response = await fetch('http://localhost:5000/productos');
+        if (!response.ok) {
+          throw new Error('Error en la solicitud');
+        }
+        this.productos = await response.json();
+      } catch (error) {
+        throw error;
+      }
+    },
+    obtenerCategorias() {
+      // Obtener todas las categorías únicas de los productos
+      this.categorias = [...new Set(this.productos.map(producto => producto.categoria))];
+    },
+  },
+};
 </script>
 
 <style>
-
+input {
+  margin: 1rem;
+}
 </style>
