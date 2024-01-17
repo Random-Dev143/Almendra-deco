@@ -11,9 +11,14 @@
         <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
           <div class="accordion-body">
             <!-- Crear checkboxes dinámicamente para cada categoría -->
-            <div v-for="categoria in categorias" :key="categoria.id">
-              <input type="checkbox" :id="categoria.id" :value="categoria.nombre" v-model="categoriasSeleccionadas">
-              <label :for="categoria.id">{{ categoria.nombre }}</label>
+            <div v-if="categorias && categorias.length">
+              <div v-for="categoria in categorias" :key="categoria">
+                <input type="checkbox" :id="categoria" :value="categoria" v-model="categoriasSeleccionadas">
+                <label :for="categoria">{{ categoria }}</label>
+              </div>
+            </div>
+            <div v-else>
+              <p>No hay categorías disponibles.</p>
             </div>
           </div>
         </div>
@@ -33,23 +38,19 @@ export default {
     };
   },
   async mounted() {
-    try {
-      await this.fetchProductos();
-      this.obtenerCategorias(); // Llamamos a la función para obtener categorías
-    } catch (error) {
-      console.error('Error al obtener productos:', error);
-    }
+    await this.fetchProductos();
+    this.obtenerCategorias(); // Llamamos a la función para obtener categorías
   },
   methods: {
     async fetchProductos() {
       try {
-        const response = await fetch('http://localhost:5000/productos');
+        const response = await fetch('http://localhost:5000/producto'); // Cambiado a /producto
         if (!response.ok) {
           throw new Error('Error en la solicitud');
         }
         this.productos = await response.json();
       } catch (error) {
-        throw error;
+        console.error('Error al obtener productos:', error);
       }
     },
     obtenerCategorias() {

@@ -17,6 +17,7 @@
         </button>
       </div>
       <div class="card-body">
+        <p class="card-categoria">{{ producto.categoria }}</p>
         <h5 class="card-title">{{ producto.nombre }}</h5>
         <p class="card-text">{{ producto.descripcion }}</p>
         <p class="card-text"><strong>Precio:</strong> ${{ producto.precio }}</p>
@@ -67,5 +68,9 @@ export default {
   border-radius:10px;
   min-height: 300px;
   object-fit: cover;
+  }
+
+  p{
+    margin-bottom: 8px;
   }
 </style>
