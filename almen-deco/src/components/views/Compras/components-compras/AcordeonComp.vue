@@ -8,17 +8,24 @@
             Filtros
           </button>
         </h2>
-        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-          <div class="accordion-body">
-            <!-- Crear checkboxes dinámicamente para cada categoría -->
-            <div v-if="categorias && categorias.length">
-              <div v-for="categoria in categorias" :key="categoria">
-                <input type="checkbox" :id="categoria" :value="categoria" v-model="categoriasSeleccionadas">
-                <label :for="categoria">{{ categoria }}</label>
+        <div class="row">
+          <div class="col">
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                  <div v-if="categorias && categorias.length">
+                    <div class="d-inline-flex align-items-center" v-for="categoria in categorias" :key="categoria">
+                      <input type="checkbox" :id="categoria" :value="categoria" v-model="categoriasSeleccionadas"
+                        @change="handleCheckboxChange(categoria)">
+                      <label :for="categoria">{{ categoria }}</label>
+                    </div>
+                  </div>
+                  <div v-else>
+                    <p>No hay categorías disponibles.</p>
+                  </div>
+                  <button class="btn btn-outline-success" type="submit">Aplicar Filtros</button>
+                </div>
               </div>
-            </div>
-            <div v-else>
-              <p>No hay categorías disponibles.</p>
             </div>
           </div>
         </div>
@@ -26,6 +33,8 @@
     </div>
   </div>
 </template>
+
+
 
 <script>
 export default {
@@ -35,12 +44,15 @@ export default {
       productos: [], // Aquí almacenaremos los productos
       categorias: [], // Aquí almacenaremos las categorías
       categoriasSeleccionadas: [], // Aquí almacenaremos las categorías seleccionadas
+      filtrosSeleccionados: [],
     };
   },
   async mounted() {
     await this.fetchProductos();
     this.obtenerCategorias(); // Llamamos a la función para obtener categorías
+    this.filtrosSeleccionados = []; // Inicializamos filtrosSeleccionados
   },
+
   methods: {
     async fetchProductos() {
       try {
@@ -57,7 +69,22 @@ export default {
       // Obtener todas las categorías únicas de los productos
       this.categorias = [...new Set(this.productos.map(producto => producto.categoria))];
     },
+
+    handleCheckboxChange(categoriaSeleccionada) {
+      // Asegurarse de que filtrosSeleccionados esté inicializado
+      this.filtrosSeleccionados = this.filtrosSeleccionados || [];
+
+      if (this.categoriasSeleccionadas.includes(categoriaSeleccionada)) {
+        // Si la categoría ya está seleccionada, la quitamos del array
+        this.filtrosSeleccionados = this.filtrosSeleccionados.filter(filtro => filtro !== categoriaSeleccionada);
+      } else {
+        // Si la categoría no está seleccionada, la agregamos al array
+        this.filtrosSeleccionados.push(categoriaSeleccionada);
+      }
+    },
+
   },
+
 };
 </script>
 
