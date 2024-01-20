@@ -41,22 +41,22 @@ export default {
   name: 'AcordeonVue',
   data() {
     return {
-      productos: [], // Aquí almacenaremos los productos
-      categorias: [], // Aquí almacenaremos las categorías
-      categoriasSeleccionadas: [], // Aquí almacenaremos las categorías seleccionadas
+      productos: [], 
+      categorias: [], 
+      categoriasSeleccionadas: [], 
       filtrosSeleccionados: [],
     };
   },
   async mounted() {
     await this.fetchProductos();
-    this.obtenerCategorias(); // Llamamos a la función para obtener categorías
-    this.filtrosSeleccionados = []; // Inicializamos filtrosSeleccionados
+    this.obtenerCategorias(); 
+    this.filtrosSeleccionados = []; 
   },
 
   methods: {
     async fetchProductos() {
       try {
-        const response = await fetch('http://localhost:5000/producto'); // Cambiado a /producto
+        const response = await fetch('http://localhost:5000/producto'); 
         if (!response.ok) {
           throw new Error('Error en la solicitud');
         }
@@ -66,19 +66,19 @@ export default {
       }
     },
     obtenerCategorias() {
-      // Obtener todas las categorías únicas de los productos
+      
       this.categorias = [...new Set(this.productos.map(producto => producto.categoria))];
     },
 
     handleCheckboxChange(categoriaSeleccionada) {
-      // Asegurarse de que filtrosSeleccionados esté inicializado
+     
       this.filtrosSeleccionados = this.filtrosSeleccionados || [];
 
       if (this.categoriasSeleccionadas.includes(categoriaSeleccionada)) {
-        // Si la categoría ya está seleccionada, la quitamos del array
+       
         this.filtrosSeleccionados = this.filtrosSeleccionados.filter(filtro => filtro !== categoriaSeleccionada);
       } else {
-        // Si la categoría no está seleccionada, la agregamos al array
+        
         this.filtrosSeleccionados.push(categoriaSeleccionada);
       }
     },
