@@ -1,7 +1,7 @@
 <template>
     <busqueda-component />
     <!-- <categories-comp /> -->
-    <acordeon-comp/>
+    <!--<acordeon-comp/>-->
     <tarjetas-compras />
 </template>
 
@@ -9,17 +9,16 @@
 import BusquedaComponent from './components-compras/BusquedaComponent.vue';
 import TarjetasCompras from './components-compras/TarjetasCompras.vue';
 // import CategoriesComp from './components-compras/CategoriesComp.vue';
-import AcordeonComp from './components-compras/AcordeonComp.vue';
+// import AcordeonComp from './components-compras/AcordeonComp.vue';
 export default {
     name: 'ComprasVue',
     components: {
         TarjetasCompras,
         BusquedaComponent,
         // CategoriesComp,
-        AcordeonComp,
+        //AcordeonComp,
     }
 }
 </script>,
-        AcordeonComp
-
+        
 <style></style>

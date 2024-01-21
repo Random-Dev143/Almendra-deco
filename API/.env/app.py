@@ -380,7 +380,6 @@ def get_productos():
 def get_producto(id):
     
     producto = Producto.query.get(id)
-
     if not producto:
         return jsonify({"message": "Producto no encontrado"}), 404
 

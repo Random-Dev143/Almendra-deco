@@ -1,7 +1,9 @@
 <template>
-    <hero-products />
-    <categories-products />
-    <map-incrusted />
+    <TransitionGroup name="fade">
+        <hero-products />
+        <categories-products />
+        <map-incrusted />
+    </TransitionGroup>
 </template>
 
 <script>
@@ -21,4 +23,15 @@ export default {
 }
 </script>
 
-<style></style>
+
+<style>
+    .fade-enter-active,
+    .fade-leave-active {
+    transition: opacity 0.5s ease;
+    }
+
+    .fade-enter-from,
+    .fade-leave-to {
+    opacity: 0;
+    }
+</style>
