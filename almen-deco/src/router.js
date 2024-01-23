@@ -10,9 +10,10 @@ const routes = [
 
     },
     {
-        path:'/compras',
+        path: '/compras/:category?',
         name: 'ComprasVue',
-        component: ComprasVue
+        component: ComprasVue,
+        props: (route) => ({ category: route.params.category || '' }),
     }
 ]
 

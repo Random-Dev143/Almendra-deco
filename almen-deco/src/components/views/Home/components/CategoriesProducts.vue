@@ -4,7 +4,7 @@
       <img :src="getCategoryImage(category)" class="card-img-top" alt="Category Image" />
       <div class="card-body text-center">
         <h5 class="card-title">{{ category }}</h5>
-        <router-link class="btn btn-custom" :to= "{name:'ComprasVue'}">Ver +</router-link>
+        <router-link class="btn btn-custom" :to="{ name: 'ComprasVue', params: { category: category } }" @click="logParam(category)">Ver +</router-link>
       </div>
     </div>
   </div>
@@ -38,14 +38,19 @@ export default {
     },
     getCategoryImage(category) {
       const productWithCategory = this.products.find(product => product.categoria === category);
-      return productWithCategory ? productWithCategory.urlimg : 'url_de_la_imagen_por_defecto';
+      if (productWithCategory) {
+        return productWithCategory.urlimg;
+      }
+      return 'url_de_la_imagen_por_defecto';
     },
-   
+    logParam(category) {
+      console.log('Parámetro que se está emitiendo:', category);
+    },
   },
 };
 </script>
-  
-  <style scoped>
+
+<style scoped>
 .categories-products {
   padding: 10px;
 }
@@ -59,7 +64,7 @@ img {
 .btn-custom {
   background-color: #bc9c8e;
   border-color: #bc9c8e;
-  color: #ffffff; /* Color del texto */
+  color: #ffffff;
 }
 
 .btn-custom:hover {
@@ -67,4 +72,3 @@ img {
   border-color: #7c5e44;
 }
 </style>
-  

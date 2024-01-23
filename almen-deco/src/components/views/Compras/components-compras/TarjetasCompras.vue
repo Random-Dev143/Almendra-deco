@@ -39,20 +39,27 @@ export default {
   name: 'TarjetasCompras',
   components: {
     AcordeonComp,
-
-    },
-
+  },
+  props: {
+    category: String,
+  },
   data() {
     return {
       productos: [],
-      categoria:[],
+      categoria: [],
       productosFiltrados: [],
-      categoriasFiltradas: [],
     };
   },
   mounted() {
-    this.fetchProductos();
-  },
+  console.log('Prop "category" recibido:', this.category);
+  this.fetchProductos();
+
+  // Solo aplicar filtros si se proporciona una categoría inicial que no sea 'default'
+  if (this.category && this.category !== 'default') {
+    this.aplicarFiltros([this.category]);
+  }
+},
+
   methods: {
     async fetchProductos() {
       try {
@@ -63,18 +70,29 @@ export default {
         const data = await response.json();
 
         this.productos = data;
-      
         this.categoria = [...new Set(this.productos.map(producto => producto.categoria))];
-        this.productosFiltrados = this.productos.slice();
-        } catch (error) {
-          console.error('Error al obtener productos:', error.message);
-        } 
-      },
-  
-    aplicarFiltros(categoriasSeleccionadas) {
-      this.categoriasFiltradas = categoriasSeleccionadas;
-      this.productosFiltrados = this.productos.filter(producto => this.categoriasFiltradas.includes(producto.categoria));
+
+        // Si hay una categoría seleccionada, aplicar el filtro al cargar
+        if (this.category) {
+          this.aplicarFiltros([this.category]);
+        } else {
+          this.productosFiltrados = [...this.productos]; // Si no hay categoría, mostrar todos los productos
+        }
+      } catch (error) {
+        console.error('Error al obtener productos:', error.message);
+      }
     },
+
+    aplicarFiltros(categoriasSeleccionadas) {
+  if (categoriasSeleccionadas && categoriasSeleccionadas.length > 0) {
+    // Filtrar productos solo si hay categorías seleccionadas
+    this.productosFiltrados = this.productos.filter(producto => categoriasSeleccionadas.includes(producto.categoria));
+  } else {
+    // Mostrar todos los productos si no hay categorías seleccionadas
+    this.productosFiltrados = [...this.productos];
+  }
+},
+
   },
 };
 </script>
