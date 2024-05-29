@@ -35,7 +35,7 @@ export default {
   name: "CarrouselHeader",
   data() {
     return {
-      url: 'http://localhost:5000/carrousel',
+      url: 'https://facundorua.pythonanywhere.com/carrousel',
       carrouseles: [],
       cargando: true,
       error: false,

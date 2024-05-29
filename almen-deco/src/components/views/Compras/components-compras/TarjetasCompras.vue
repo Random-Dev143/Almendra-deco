@@ -63,7 +63,7 @@ export default {
   methods: {
     async fetchProductos() {
       try {
-        const response = await fetch('http://localhost:5000/producto');
+        const response = await fetch('https://facundorua.pythonanywhere.com/producto');
         if (!response.ok) {
           throw new Error(`Error al obtener productos. Código de estado: ${response.status}`);
         }
