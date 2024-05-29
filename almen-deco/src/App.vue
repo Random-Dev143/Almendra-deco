@@ -1,9 +1,9 @@
 <template>
   <div id="app" class="container">
-    <carrousel-header/>
-    <nav-bar/>
-    <RouterView/>  
-    <footer-vue/>
+    <carrousel-header />
+    <nav-bar />
+    <RouterView /> <!-- Cambiar RouterView a router-view -->
+    <footer-vue />
   </div>
 </template>
 
@@ -11,20 +11,20 @@
 import CarrouselHeader from "@/components/CarrouselHeader.vue"
 import NavBar from "@/components/NavBar.vue"
 import FooterVue from "@/components/FooterVue.vue"
+import { RouterView } from 'vue-router';
 
 export default {
   name: 'App',
   components: {
     CarrouselHeader,
     NavBar,
-
     FooterVue,
-   },
+    RouterView,
+  },
 }
 </script>
 
 <style>
-    
 #app {
   margin-top: 0;
   padding: 0;
@@ -32,6 +32,5 @@ export default {
   margin-right: auto;
   max-width: 90vw;
   background: url('https://i.postimg.cc/VkWdBPgG/background-color.png') center/cover;
-  
 }
 </style>

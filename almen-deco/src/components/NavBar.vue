@@ -15,8 +15,12 @@
           <li class="nav-item">
             <router-link class="nav-link" :to= "{name:'ComprasVue'}">Productos</router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/carro">Carro</router-link>
+          <li class="nav-item position-relative">
+            <router-link class="nav-link" to="/carro">
+              Carro
+              <div v-if="carroCantidad > 0" class="carro-cantidad">{{ carroCantidad }}</div>
+            </router-link>
+            <div v-if="carroTotal > 0" class="carro-total">${{ carroTotal }}</div>
           </li>
         </ul>
       </div>
@@ -24,24 +28,37 @@
   </div>
 </template>
 
+
+
 <script>
+import { state } from '@/state';
+
 export default {
   name: 'NavBar',
+  computed: {
+    carroCantidad() {
+      return state.carro.reduce((acc, item) => acc + item.cantidad, 0);
+    },
+    carroTotal() {
+      return state.carro.reduce((acc, item) => acc + item.producto.precio * item.cantidad, 0).toFixed(2);
+    },
+  },
 };
 </script>
+
 
 <style scoped>
 #logo {
   font-size: xx-large;
   color: rgb(0, 0, 0);
-  font-family:'Times New Roman', Times, serif;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .navbar {
   padding: 10px 20px;
   margin-top: 10px;
   position: sticky;
-  top:0;
+  top: 0;
   z-index: 3;
 }
 
@@ -54,14 +71,39 @@ li {
   transition: 0.4s ease-in-out;
 }
 
-li:hover{
+li:hover {
   background-color: rgb(255, 194, 171);
-  scale: 1.2;
+  transform: scale(1.2);
 }
 
-.nav-link{
+.nav-link {
   font-size: 1.2rem;
+  position: relative;
 }
 
+.position-relative {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.carro-cantidad {
+  position: absolute;
+  top: -8px;
+  right: -15px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.carro-total {
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: gray;
+  text-align: center;
+}
 </style>

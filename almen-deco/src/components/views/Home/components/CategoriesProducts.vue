@@ -4,7 +4,7 @@
       <img :src="getCategoryImage(category)" class="card-img-top" alt="Category Image" />
       <div class="card-body text-center">
         <h5 class="card-title">{{ category }}</h5>
-        <router-link class="btn btn-custom" :to="{ name: 'ComprasVue', params: { category: category } }" @click="logParam(category)">Ver +</router-link>
+        <router-link class="btn btn-custom" :to="{ name: 'ComprasVue', params: { category } }" @click="logParam(category)">Ver +</router-link>
       </div>
     </div>
   </div>
@@ -39,7 +39,7 @@ export default {
     getCategoryImage(category) {
       const productWithCategory = this.products.find(product => product.categoria === category);
       if (productWithCategory) {
-        return productWithCategory.urlimg;
+        return productWithCategory.urlimg[0]; 
       }
       return 'url_de_la_imagen_por_defecto';
     },
@@ -49,6 +49,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .categories-products {
