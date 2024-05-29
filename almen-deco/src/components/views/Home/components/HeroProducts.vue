@@ -30,7 +30,7 @@ export default {
   name: "HeroProducts",
   data() {
     return {
-      url: 'http://localhost:5000/hero',
+      url: 'https://facundorua.pythonanywhere.com/hero',
       heros: [],
       cargando: true,
       error: false,

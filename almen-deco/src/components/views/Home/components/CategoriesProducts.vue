@@ -29,7 +29,7 @@ export default {
   methods: {
     async fetchProducts() {
       try {
-        const response = await fetch('http://localhost:5000/producto');
+        const response = await fetch('https://facundorua.pythonanywhere.com/producto');
         const data = await response.json();
         this.products = data;
       } catch (error) {
