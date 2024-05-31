@@ -6,6 +6,7 @@
         </div>
         <div class="footer-section">
           <p>&copy; 2023 Almendra Decoraciones - Nogolí, San Luis</p>
+          <p>blackSheep_dev</p>
         </div>
         <div class="footer-section social">
           <h2>SÍGUENOS</h2>

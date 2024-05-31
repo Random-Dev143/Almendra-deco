@@ -1,12 +1,16 @@
 from flask import Flask, jsonify, request
-from collections import defaultdict
 from flask_cors import CORS
+from collections import defaultdict
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from marshmallow.exceptions import MarshmallowError
+import json
 
-app = Flask (__name__)
-CORS(app)
+app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
+
+#app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://FacundoRua:nosequeponer@FacundoRua.mysql.pythonanywhere-services.com/FacundoRua$almendra-deco'
 app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:password@127.0.0.1:3306/almendra-deco'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 db = SQLAlchemy(app)
@@ -31,7 +35,7 @@ class ImagenProducto(db.Model):
     def __init__(self,urlimg,producto_id):
         self.urlimg=urlimg
         self.producto_id=producto_id
-       
+
 
 class Carrousel(db.Model):
     id=db.Column(db.Integer, primary_key=True)
@@ -79,7 +83,7 @@ carrouseles_schema = CarrouselSchema(many=True)
 class HeroSchema(ma.Schema):
     class Meta:
         fields=('id','titulo','texto','img')
-    
+
 hero_schema = HeroSchema()
 heros_schema = HeroSchema(many=True)
 
@@ -103,7 +107,7 @@ def delete_carrusel(id):
     return carrousel_schema.jsonify(carrousel)
 
 @app.route('/carrousel',methods=['POST'])
-def create_registro():
+def create_post():
     titulo= request.json['titulo']
     subtitulo = request.json['subtitulo']
     urlimg= request.json['urlimg']
@@ -123,7 +127,7 @@ def update_carrousel(id):
     carrousel.titulo=titulo
     carrousel.subtitulo=subtitulo
     carrousel.urlimg=urlimg
-   
+
     db.session.commit()
     return carrousel_schema.jsonify(carrousel)
 
@@ -159,18 +163,24 @@ def create_hero():
 
 @app.route('/hero/<id>', methods=['PUT'])
 def update_hero(id):
-    hero=Hero.query.get(id)
+    hero = Hero.query.get(id)
+    if not hero:
+        return jsonify({"message": "Hero no encontrado"}), 404
+    try:
+        data = request.json
+        print(f"Datos recibidos para actualizar: {data}")  # Agrega esto para depuración
+        if 'titulo' in data:
+            hero.titulo = data['titulo']
+        if 'texto' in data:
+            hero.texto = data['texto']
+        if 'img' in data:
+            hero.img = data['img']
+        db.session.commit()
+        return hero_schema.jsonify(hero)
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": f"Error al actualizar el hero: {str(e)}"}), 500
 
-    titulo = request.json['titulo']
-    texto=request.json['text']
-    img=request.json['img']
-
-    hero.titulo=titulo
-    hero.texto=texto
-    hero.img=img
-   
-    db.session.commit()
-    return hero_schema.jsonify(hero)
 
     #####################################################------------Products--------------#################################################
 
@@ -200,15 +210,15 @@ def get_productos():
 
 @app.route('/producto/<id>', methods=['GET'])
 def get_producto(id):
-    
+
     producto = Producto.query.get(id)
     if not producto:
         return jsonify({"message": "Producto no encontrado"}), 404
 
-    
+
     imagenes = ImagenProducto.query.filter_by(producto_id=id).all()
 
-    
+
     producto_json = {
         "id": producto.id,
         "categoria": producto.categoria,
@@ -246,20 +256,20 @@ def delete_producto(id):
     except Exception as e:
 
         db.session.rollback()
-        return jsonify({"message": "Error al borrar el producto"}), 500
-    
+        return jsonify({"message": f"Error al borrar el producto: {str(e)}"}), 500
 
-    
+
+
 @app.route('/producto/<int:id>', methods=['PUT'])
 def update_producto(id):
-    
+
     producto = Producto.query.get(id)
 
     if not producto:
         return jsonify({"message": "Producto no encontrado"}), 404
 
     try:
-        
+
         if 'categoria' in request.json:
             producto.categoria = request.json['categoria']
         if 'nombre' in request.json:
@@ -276,7 +286,7 @@ def update_producto(id):
                 nueva_imagen = ImagenProducto(urlimg=urlimg, producto_id=id)
                 db.session.add(nueva_imagen)
 
-      
+
         db.session.commit()
 
         return jsonify({"message": "Producto y sus imágenes modificados correctamente"}), 200
@@ -287,7 +297,9 @@ def update_producto(id):
         return jsonify({"message": f"Error al modificar el producto: {str(e)}"}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+   app.run(debug=True, port=5000)
 
-
+#@app.route('/')
+#def hello_world():
+#    return 'Hello from Flask!'
 

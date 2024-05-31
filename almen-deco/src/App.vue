@@ -2,7 +2,7 @@
   <div id="app" class="container">
     <carrousel-header />
     <nav-bar />
-    <RouterView /> <!-- Cambiar RouterView a router-view -->
+    <RouterView /> 
     <footer-vue />
   </div>
 </template>

@@ -22,6 +22,9 @@
             </router-link>
             <div v-if="carroTotal > 0" class="carro-total">${{ carroTotal }}</div>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :to= "{name:'CrudVue'}">CRUD</router-link>
+          </li>
         </ul>
       </div>
     </div>
